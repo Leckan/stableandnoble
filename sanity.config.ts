@@ -5,8 +5,8 @@ import { schemaTypes } from "./src/sanity/schemas";
 export default defineConfig({
   name: "stable-and-noble",
   title: "Stable & Noble Properties",
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || "",
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || "production",
+  projectId: process.env.SANITY_STUDIO_PROJECT_ID || "",
+  dataset: process.env.SANITY_STUDIO_DATASET || "production",
   plugins: [structureTool()],
   schema: { types: schemaTypes }
 });

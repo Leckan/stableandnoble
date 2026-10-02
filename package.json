@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "studio": "CHOKIDAR_USEPOLLING=1 sanity dev --host 127.0.0.1 --port 3333",
+    "studio": "node scripts/studio.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/env": "^15.5.4",
     "@sanity/client": "^8.9.0",
     "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.57.0",
