@@ -15,7 +15,7 @@ A premium real estate investment company website and platform foundation for Sta
 1. Install Node.js 20 or newer.
 2. Run `npm install`.
 3. Copy `.env.example` to `.env.local`.
-4. Run `npm run dev` and open http://localhost:3000.
+4. Run `npm run dev` and open http://localhost:3000. Run `npm run studio` in a second terminal to start Sanity.
 
 The public site and manual-input calculator can be explored without third-party credentials. Lead submissions require Supabase URL and service role key; without them the API returns an intentional configuration error and does not pretend to store the lead.
 
@@ -30,6 +30,7 @@ The public site and manual-input calculator can be explored without third-party 
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Future Sanity content | No |
 | `NEXT_PUBLIC_SANITY_DATASET` | Future Sanity content | No |
 | `SANITY_API_TOKEN` | Preview/draft CMS access | **Yes, server only** |
+| `SANITY_STUDIO_URL` | Optional deployed Studio URL used by `/studio` | No |
 | `RESEND_API_KEY` | Inquiry confirmation email delivery | **Yes, server only** |
 | `RESEND_FROM_EMAIL` | Verified sender address for inquiry emails | No |
 | `LEAD_NOTIFICATION_EMAIL` | Optional internal lead notification recipient | No |
@@ -59,7 +60,7 @@ The lead API uses the service-role key only on the server. Public reads use the 
 
 ## Sanity
 
-Run `npm run studio` from the repository root. The Studio uses the configured project ID and dataset. Create a `siteSettings` document and publish it to update the homepage hero and introduction. Other editorial schemas are ready for pages, insights, team, FAQs, case studies, and markets. Published insights and market records still need their public listing/detail UI wired before use.
+Run `npm run studio` from the repository root in a second terminal. The Studio uses the configured project ID and dataset and serves locally on port `3333`. In development, `/studio` opens that local editor; in production, set `SANITY_STUDIO_URL` to the deployed Studio URL. Create a `siteSettings` document and publish it to update the homepage hero and introduction. Other editorial schemas are ready for pages, insights, team, FAQs, case studies, and markets. Published insights and market records still need their public listing/detail UI wired before use.
 
 ## Email
 
@@ -67,7 +68,7 @@ Inquiry confirmation delivery requires `RESEND_API_KEY` and a verified `RESEND_F
 
 ## Routes
 
-Implemented: `/`, `/about`, `/what-we-do` and service pages, `/portfolio` and database-backed property details, `/sell-your-property` and `/sell-your-property/thank-you`, `/invest`, `/invest/partners`, `/property-analyzer`, `/markets/[slug]` placeholder, `/insights` and article placeholder, `/contact`, `/privacy`, `/terms`, `/disclosures`, `/admin` operations dashboard, `/api/leads`, `/api/analytics`, `/sitemap.xml`, `/robots.txt`.
+Implemented: `/`, `/about`, `/what-we-do` and service pages, `/portfolio` and database-backed property details, `/sell-your-property` and `/sell-your-property/thank-you`, `/invest`, `/invest/partners`, `/property-analyzer`, `/markets/[slug]` placeholder, `/insights` and article placeholder, `/contact`, `/privacy`, `/terms`, `/disclosures`, `/studio` Sanity handoff, `/admin` operations dashboard, `/api/leads`, `/api/analytics`, `/sitemap.xml`, `/robots.txt`.
 
 ## Checks
 
