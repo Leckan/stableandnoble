@@ -24,6 +24,6 @@
 5. Add Supabase schema, indexes, constraints, and RLS foundation.
 6. Document local setup and integrations; run available static/build checks.
 
-## Scope notes
+## Current status
 
-The implementation now includes Supabase Auth gating for the admin, staff-facing property/lead/deal pages, public published-property reads, Sanity Studio schemas and homepage copy reads, Resend inquiry-email hooks, and HubSpot contact upsert hooks. The migration has not been applied and no external writes or emails were made while building. Resend sender and notification-recipient variables are not configured. Object storage uploads, analytics provider wiring, and automated browser tests remain before production launch. The API currently has a process-local throttle; replace it with shared rate limiting at the edge or in a datastore for multi-instance deployment. No testimonials, operating history, public portfolio, market activity, or investment returns are fabricated.
+This plan describes the intended architecture and original implementation sequence. Current completion and pending work have moved on; use [`stable-noble-v2-status.md`](./stable-noble-v2-status.md) for the latest repository and external-service review. In particular, migrations and storage functionality have since been added, while live service configuration, deployment verification, and end-to-end QA remain launch tasks. No testimonials, operating history, public portfolio, market activity, or investment returns are fabricated.
