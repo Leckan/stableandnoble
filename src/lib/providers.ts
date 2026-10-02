@@ -11,6 +11,13 @@ export interface RentalDataProvider { estimateMonthlyRent(address: string): Prom
 export interface AIAnalysisProvider { summarize(input: PropertyAnalysisInput): Promise<string> }
 export type LeadInput = { kind: "seller" | "investor" | "contact"; name: string; email: string; phone?: string; address?: string; city?: string; state?: string; zip?: string; propertyType?: string; bedrooms?: number; bathrooms?: number; squareFeet?: number; occupancy?: string; condition?: string; situation?: string; preferredContact?: string; interest?: string; photoUploads?: string[]; message?: string };
 export type PropertyAnalysisInput = { purchasePrice: number; renovationBudget: number; monthlyRent: number };
+export type AnalyticsEventName = "page_view" | "property_view" | "seller_form_started" | "seller_form_completed" | "investor_form_started" | "investor_form_completed" | "contact_form_submitted" | "property_analyzer_started" | "property_analyzer_completed";
+
+export async function recordAnalyticsEvent(eventName: AnalyticsEventName, route: string) {
+  const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY!, { auth: { persistSession: false } });
+  const { error } = await db.from("analytics_events").insert({ event_name: eventName, route });
+  if (error) throw error;
+}
 
 export class HubSpotCRMProvider implements CRMProvider {
   private readonly token = process.env.HUBSPOT_ACCESS_TOKEN;

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { SiteHeader, SiteFooter } from "@/components/site-shell";
+import { AnalyticsListener } from "@/components/analytics";
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://www.stableandnoble.com";
 export const metadata: Metadata = {
@@ -12,5 +13,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  return <html lang="en"><body><SiteHeader />{children}<SiteFooter /></body></html>;
+  return <html lang="en"><body><AnalyticsListener/><SiteHeader />{children}<SiteFooter /></body></html>;
 }
