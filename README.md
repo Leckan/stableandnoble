@@ -32,6 +32,7 @@ The public site and manual-input calculator can be explored without third-party 
 | `SANITY_STUDIO_PROJECT_ID` | Optional Studio project ID; defaults to the `NEXT_PUBLIC_` value for local Studio startup | No |
 | `SANITY_STUDIO_DATASET` | Optional Studio dataset; defaults to the `NEXT_PUBLIC_` value for local Studio startup | No |
 | `SANITY_API_TOKEN` | Preview/draft CMS access | **Yes, server only** |
+| `SANITY_STUDIO_PORT` | Local Studio dev-server port (defaults to `3334`) | No |
 | `SANITY_STUDIO_URL` | Optional deployed Studio URL used by `/studio` | No |
 | `RESEND_API_KEY` | Inquiry confirmation email delivery | **Yes, server only** |
 | `RESEND_FROM_EMAIL` | Verified sender address for inquiry emails | No |
@@ -62,7 +63,7 @@ The lead API uses the service-role key only on the server. Public reads use the 
 
 ## Sanity
 
-Run `npm run studio` from the repository root in a second terminal. The launcher loads `.env` and maps `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` to Sanity's Studio variables when the `SANITY_STUDIO_*` equivalents are unset. The Studio serves locally on port `3333`. In development, `/studio` opens that local editor; in production, set `SANITY_STUDIO_URL` to the deployed Studio URL. Create a `siteSettings` document and publish it to update the homepage hero and introduction. Other editorial schemas are ready for pages, insights, team, FAQs, case studies, and markets. Published insights and market records still need their public listing/detail UI wired before use.
+Run `npm run studio` from the repository root in a second terminal. The launcher loads `.env` and maps `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET` to Sanity's Studio variables when the `SANITY_STUDIO_*` equivalents are unset. The Studio serves locally on port `3334` by default; set `SANITY_STUDIO_PORT` to change it. Add the local Studio origin to the Sanity project's CORS settings before editing content. In development, `/studio` opens that local editor; in production, set `SANITY_STUDIO_URL` to the deployed Studio URL. Create a `siteSettings` document and publish it to update the homepage hero and introduction. Published insight articles power the `/insights` list and article pages. Other editorial schemas are ready for pages, team, FAQs, case studies, and markets; market records still need public listing/detail pages.
 
 ## Email
 

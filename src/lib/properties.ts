@@ -1,10 +1,10 @@
 export type PublicProperty = {
-  id: string; slug: string; title: string; city: string; state: string; property_type: string; status: string;
+  id: string; slug: string; title: string; city: string; state: string; property_type: string; status: string; updated_at: string;
   strategy: string | null; description: string | null; bedrooms: number | null; bathrooms: number | null;
   square_feet: number | null; is_public: boolean; property_images?: { url: string; alt_text: string | null; sort_order: number }[];
 };
 
-const selectable = "id,slug,title,city,state,property_type,status,strategy,description,bedrooms,bathrooms,square_feet,is_public,property_images(url,alt_text,sort_order)";
+const selectable = "id,slug,title,city,state,property_type,status,strategy,description,bedrooms,bathrooms,square_feet,is_public,updated_at,property_images(url,alt_text,sort_order)";
 
 async function queryProperties(filters: string, limit: number): Promise<PublicProperty[]> {
   const base = process.env.NEXT_PUBLIC_SUPABASE_URL; const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;

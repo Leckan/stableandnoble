@@ -8,7 +8,8 @@ process.env.SANITY_STUDIO_DATASET ||= process.env.NEXT_PUBLIC_SANITY_DATASET || 
 process.env.CHOKIDAR_USEPOLLING ||= "1";
 
 const cli = resolve("node_modules/@sanity/cli/bin/run.js");
-const studio = spawn(process.execPath, [cli, "dev", "--host", "127.0.0.1", "--port", "3333"], { stdio: "inherit", env: process.env });
+const studioPort = process.env.SANITY_STUDIO_PORT || "3334";
+const studio = spawn(process.execPath, [cli, "dev", "--host", "localhost", "--port", studioPort], { stdio: "inherit", env: process.env });
 
 for (const signal of ["SIGINT", "SIGTERM"]) process.on(signal, () => studio.kill(signal));
 studio.on("exit", (code, signal) => {
