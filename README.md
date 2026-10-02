@@ -39,7 +39,12 @@ The public site and manual-input calculator can be explored without third-party 
 
 ## Database
 
-Create a Supabase project, then apply `supabase/migrations/202610010001_initial_schema.sql` using the Supabase CLI or SQL editor. The migration was not applied automatically from this workspace. Create/invite a team account in Supabase Auth, then grant its profile staff access in the SQL editor:
+Create and link a Supabase project, then apply both migrations in timestamp order using the Supabase CLI or SQL editor:
+
+1. `supabase/migrations/202610010001_initial_schema.sql` creates the operational schema and access policies.
+2. `supabase/migrations/202610020001_asset_storage.sql` creates the private seller-inquiry photo bucket and public property-image bucket with their storage policies.
+
+The application never applies migrations automatically. After applying them, create/invite a team account in Supabase Auth, then grant its profile staff access in the SQL editor:
 
 ```sql
 insert into public.users (id, full_name, role)
@@ -61,12 +66,12 @@ Inquiry confirmation delivery requires `RESEND_API_KEY` and a verified `RESEND_F
 
 ## Routes
 
-Implemented: `/`, `/about`, `/what-we-do` and service pages, `/portfolio`, `/portfolio/[slug]` placeholder, `/sell-your-property`, `/invest`, `/invest/partners`, `/property-analyzer`, `/markets/[slug]` placeholder, `/insights` and article placeholder, `/contact`, `/privacy`, `/terms`, `/disclosures`, `/admin` placeholders, `/api/leads`, `/sitemap.xml`, `/robots.txt`.
+Implemented: `/`, `/about`, `/what-we-do` and service pages, `/portfolio` and database-backed property details, `/sell-your-property` and `/sell-your-property/thank-you`, `/invest`, `/invest/partners`, `/property-analyzer`, `/markets/[slug]` placeholder, `/insights` and article placeholder, `/contact`, `/privacy`, `/terms`, `/disclosures`, `/admin` operations dashboard, `/api/leads`, `/sitemap.xml`, `/robots.txt`.
 
 ## Checks
 
-`npm run typecheck` and `npm run build` are the principal local checks. `npm run lint` is provided for consistency; Next.js 15 may require a separately configured ESLint setup.
+Run `npm run typecheck`, `npm run lint`, `npm test`, and `npm run build` for local checks. The current Vitest suite covers the manual property-analysis calculations.
 
 ## Production readiness
 
-Before launch: apply the Supabase migration; create Auth users and assign staff roles; complete property edit/archive and media workflows; create/publish site settings in Sanity; configure Resend sender and lead-recipient addresses; implement upload storage and shared edge/datastore rate limiting (the current throttle is process-local); verify HubSpot token scopes and contact sync; connect analytics and AI/market data providers; replace placeholder legal text after legal review; add approved property photos/data; and run browser, accessibility, and responsive QA. The app code has not been used to write to the configured external services. Property calculations are illustrative only and do not use external market data.
+Before launch: apply both Supabase migrations; create Auth users and assign staff roles; create/publish site settings in Sanity; configure a verified Resend sender and internal lead recipient; replace the process-local lead throttle with a shared edge/datastore limiter; verify HubSpot token scopes and contact sync; connect analytics and AI/market data providers; replace placeholder legal text after legal review; add approved property photos/data; and run browser, accessibility, and responsive QA. Seller photo uploads accept up to five JPEG, PNG, or WebP images, at 5 MB each and 25 MB total. The app code has not been used to write to configured external services from this workspace. Property calculations are illustrative only and do not use external market data.
