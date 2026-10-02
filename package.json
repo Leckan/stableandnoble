@@ -4,16 +4,21 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "studio": "sanity dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@sanity/client": "^8.9.0",
+    "@supabase/ssr": "^0.12.7",
     "@supabase/supabase-js": "^2.57.0",
     "next": "^15.5.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "resend": "^6.32.0",
+    "sanity": "^6.17.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {

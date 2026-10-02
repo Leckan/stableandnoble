@@ -6,7 +6,8 @@ A premium real estate investment company website and platform foundation for Sta
 
 - Next.js App Router and TypeScript. Public marketing routes render on the server; interactive navigation, lead forms, and the calculator are small client components.
 - Supabase/PostgreSQL is intended for operational data. A migration is in `supabase/migrations` with RLS enabled.
-- CMS content is intended for Sanity. The current copy is local and can be moved into Sanity documents without changing the page shell.
+- Sanity Studio schemas live in `src/sanity/schemas.ts`; launch the standalone Studio with `npm run studio`. Homepage copy reads the published `siteSettings` document and falls back to local editorial defaults.
+- Supabase Auth protects `/admin`; staff role checks use the `public.users` profile table. Public portfolio pages read only published properties through the anon key.
 - Provider contracts in `src/lib/providers.ts` prepare for CRM, email, valuation, rental data, market data, and AI integrations.
 
 ## Local development
@@ -29,14 +30,34 @@ The public site and manual-input calculator can be explored without third-party 
 | `NEXT_PUBLIC_SANITY_PROJECT_ID` | Future Sanity content | No |
 | `NEXT_PUBLIC_SANITY_DATASET` | Future Sanity content | No |
 | `SANITY_API_TOKEN` | Preview/draft CMS access | **Yes, server only** |
-| `RESEND_API_KEY` | Future email delivery | **Yes, server only** |
-| `HUBSPOT_ACCESS_TOKEN` | Future CRM sync | **Yes, server only** |
+| `RESEND_API_KEY` | Inquiry confirmation email delivery | **Yes, server only** |
+| `RESEND_FROM_EMAIL` | Verified sender address for inquiry emails | No |
+| `LEAD_NOTIFICATION_EMAIL` | Optional internal lead notification recipient | No |
+| `HUBSPOT_ACCESS_TOKEN` | Lead contact upsert to HubSpot | **Yes, server only** |
 | `OPENAI_API_KEY` | Future AI analysis | **Yes, server only** |
 | `MAPBOX_TOKEN` | Future map experience | Keep server-side if scoped as secret |
 
 ## Database
 
-Create a Supabase project, then apply `supabase/migrations/202610010001_initial_schema.sql` using the Supabase CLI or SQL editor. The lead API uses the service-role key only on the server. Keep RLS enabled and configure a first admin user and role before building admin write operations.
+Create a Supabase project, then apply `supabase/migrations/202610010001_initial_schema.sql` using the Supabase CLI or SQL editor. The migration was not applied automatically from this workspace. Create/invite a team account in Supabase Auth, then grant its profile staff access in the SQL editor:
+
+```sql
+insert into public.users (id, full_name, role)
+select id, 'Team Admin', 'admin'
+from auth.users
+where email = 'admin@example.com'
+on conflict (id) do update set role = 'admin';
+```
+
+The lead API uses the service-role key only on the server. Public reads use the anon key under RLS. Never put service-role, Sanity, Resend, HubSpot, or OpenAI secrets in `NEXT_PUBLIC_` variables.
+
+## Sanity
+
+Run `npm run studio` from the repository root. The Studio uses the configured project ID and dataset. Create a `siteSettings` document and publish it to update the homepage hero and introduction. Other editorial schemas are ready for pages, insights, team, FAQs, case studies, and markets. Published insights and market records still need their public listing/detail UI wired before use.
+
+## Email
+
+Inquiry confirmation delivery requires `RESEND_API_KEY` and a verified `RESEND_FROM_EMAIL`. Internal notifications are sent only when `LEAD_NOTIFICATION_EMAIL` is configured. Neither address is currently configured in `.env`, so email hooks remain inactive. The app does not send an email during setup or build.
 
 ## Routes
 
@@ -48,4 +69,4 @@ Implemented: `/`, `/about`, `/what-we-do` and service pages, `/portfolio`, `/por
 
 ## Production readiness
 
-Before launch: configure Supabase and migrate the schema; add Supabase Auth and staff role provisioning; complete CRUD and lead-status workflows; add Sanity schemas and connect content; implement upload storage and shared edge/datastore rate limiting (the current throttle is process-local); connect email and CRM providers; replace placeholder legal text after legal review; add approved portfolio images/data; connect analytics; and run accessibility, browser, and responsive QA. Property calculations are illustrative only and do not use external market data.
+Before launch: apply the Supabase migration; create Auth users and assign staff roles; complete property edit/archive and media workflows; create/publish site settings in Sanity; configure Resend sender and lead-recipient addresses; implement upload storage and shared edge/datastore rate limiting (the current throttle is process-local); verify HubSpot token scopes and contact sync; connect analytics and AI/market data providers; replace placeholder legal text after legal review; add approved property photos/data; and run browser, accessibility, and responsive QA. The app code has not been used to write to the configured external services. Property calculations are illustrative only and do not use external market data.

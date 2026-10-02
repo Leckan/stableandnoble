@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { createLead } from "@/lib/providers";
+import { createLead, HubSpotCRMProvider, sendLeadEmails } from "@/lib/providers";
 
 const optionalNumber = z.preprocess(value => value === "" ? undefined : value, z.coerce.number().min(0).max(10000000).optional());
 const schema = z.object({
@@ -29,6 +29,11 @@ export async function POST(request: Request) {
   if (!parsed.success) return NextResponse.json({ error: "Please check the required fields." }, { status: 400 });
   const configured = process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!configured) return NextResponse.json({ error: "Lead storage is not configured yet." }, { status: 503 });
-  try { await createLead(parsed.data); return NextResponse.json({ ok: true }, { status: 201 }); }
+  try {
+    await createLead(parsed.data);
+    try { await new HubSpotCRMProvider().createLead(parsed.data); } catch (error) { console.error("CRM lead sync failed", error instanceof Error ? error.message : "unknown provider error"); }
+    try { await sendLeadEmails(parsed.data); } catch { /* Lead is persisted; email delivery can be retried separately. */ }
+    return NextResponse.json({ ok: true }, { status: 201 });
+  }
   catch { return NextResponse.json({ error: "We couldn’t save your inquiry. Please try again." }, { status: 500 }); }
 }
